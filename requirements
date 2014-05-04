@@ -1,6 +1,22 @@
 # Format:
-# Value_of_requrement<space>requirement description
+# --requirement_description--
+# detailed requirement description
 
-(00:40:48) ogneej: --хочу общий рейтинг оценок
+(00:40:48) ogneej: --хочу общий рейтинг оценок--
 (00:40:54) ogneej: и раздельный по юзерам
 (00:41:03) ogneej: а в общем иметь возможность exclude user
+
+(01:32:00) zimy: --Roles--
+(01:32:00) zimy: Admins are able to create roles and assign privileges to them
+
+(01:32:00) zimy: --Jukebox-- 
+(01:32:00) zimy: Users with Jukebox privilege can control Jukebox
+
+(01:32:00) zimy: --openjdk-7 and Oracle JDK 7, 8--
+(01:32:00) zimy: geluid must compile and run with mentioned JDKs
+
+(01:32:00) zimy: --Gradle--
+(01:32:00) zimy: Build system: gradle
+
+
+ 
