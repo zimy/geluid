@@ -2,7 +2,11 @@ package name.hyperboria.on.zimy.geluid.dao.concrete;
 
 import name.hyperboria.on.zimy.geluid.dao.userDao;
 import name.hyperboria.on.zimy.geluid.model.User;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
@@ -20,6 +24,7 @@ import java.util.List;
 @Transactional
 @Repository
 public class userDaoImpl implements userDao {
+    private static final Logger log = LoggerFactory.getLogger(userDao.class);
     private SessionFactory sessionFactory;
 
     @Override
@@ -34,9 +39,10 @@ public class userDaoImpl implements userDao {
 
     @Override
     public User findByName(String username) {
+        log.info("Searching for user " + username);
         List users = new ArrayList();
         users = getSessionFactory().getCurrentSession().createQuery("from User where username=?").setParameter(0, username).list();
-        if (users.size()==0) {
+        if (users.size() == 0) {
             return null;
         }
         return (User) users.get(0);

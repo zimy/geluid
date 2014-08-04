@@ -1,8 +1,8 @@
 package name.hyperboria.on.zimy.geluid.model;
 
 import name.hyperboria.on.zimy.geluid.dao.userDao;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +20,8 @@ import java.util.Set;
  * @since 26.07.14
  */
 public class UsersService implements UserDetailsService {
+    private static final Logger log = LoggerFactory.getLogger(UsersService.class);
     private userDao dao;
-    private Log log = LogFactory.getLog(UsersService.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

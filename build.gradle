@@ -26,9 +26,10 @@ dependencies {
     compile ("org.springframework.security:spring-security-web")
     compile ("org.springframework.security:spring-security-config")
     compile ("org.springframework:spring-orm")
-//    compile ("com.h2database:h2")
     compile 'org.hsqldb:hsqldb'
     compile ("org.hibernate:hibernate-entitymanager:4.3.5.Final")
     compile 'com.intellij:annotations:12.0'
     testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    //compile 'org.springframework.boot:spring-boot-starter-remote-shell'
 }

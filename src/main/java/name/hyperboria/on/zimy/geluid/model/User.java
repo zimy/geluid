@@ -62,7 +62,8 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     public Set<UserRole> getUserRole() {
         return userRole;
     }

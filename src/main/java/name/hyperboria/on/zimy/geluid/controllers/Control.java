@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class Control {
     @RequestMapping({"/welcome","/"})
-    public @ResponseBody String index()
+    public String index()
     {
-        return "index page!";
+        return "home";
     }
 
     @RequestMapping("/admin")
-    public @ResponseBody String admin() {return "admin, lol";}
+    public String admin() {return "admin";}
 
     @RequestMapping("/login")
     public String login() {return "login";}
