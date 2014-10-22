@@ -19,6 +19,8 @@ repositories {
 apply plugin: 'save-ssd'
 apply plugin: 'spring-boot'
 apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 //noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.7
