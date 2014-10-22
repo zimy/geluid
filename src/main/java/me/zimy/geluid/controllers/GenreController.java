@@ -30,7 +30,7 @@ public class GenreController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, params = {"name"})
+    @RequestMapping(method = RequestMethod.GET, params = {"name"})
     public Genre getOneByRequestParam(@RequestParam(value = "id", defaultValue = "0") Long id) {
         return repository.findOne(id);
     }
