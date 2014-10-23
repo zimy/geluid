@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import me.zimy.geluid.domain.MappedSuperclasses.IdSuperclass;
 
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 /**
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Song extends IdSuperclass {
     long length;
+    @Lob
     @JsonIgnore
     String filename;
     @ManyToOne
