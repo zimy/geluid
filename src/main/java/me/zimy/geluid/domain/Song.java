@@ -74,4 +74,17 @@ public class Song extends IdSuperclass {
         result = 31 * result + (filename != null ? filename.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "length=" + length +
+                ", filename='" + filename + '\'' +
+                ", album=" + album +
+                ", author=" + author +
+                ", genre=" + genre +
+                ", name=" + getName() +
+                ", id=" + getId() +
+                '}';
+    }
 }

@@ -37,7 +37,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
     @Override
     public void persistAudio(Path file, ServerInformatory informatory1) {
         AudioFileMetadata metadata = informatory1.getMetadata(file.toString());
-        logger.info("Saving something");
+        logger.info("Supported content found at " + metadata.getPath());
         createOrFindSong(metadata);
     }
 
@@ -47,6 +47,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             genre = new Genre();
             genre.setName(name);
             genre = genreRepository.saveAndFlush(genre);
+            logger.info("Genre object created: " + genre);
         }
         return genre;
     }
@@ -58,6 +59,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             author = new Author();
             author.setName(name);
             author = authorRepository.saveAndFlush(author);
+            logger.info("Author object created: " + author);
         } else {
             author = authors.get(0);
         }
@@ -79,6 +81,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             album.setName(name);
             album.setAuthor(author);
             album = albumRepository.saveAndFlush(album);
+            logger.info("Album object created: " + album);
         }
         return album;
     }
@@ -91,7 +94,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
         List<Song> getByAlbum = songRepository.findByAlbum(album);
         if (getByAlbum != null && getByAlbum.size() != 0) {
             for (Song song1 : getByAlbum) {
-                if (song1.getName().equals(metadata.getTitle())) {
+                if (metadata.getTitle().equals(song1.getName())) {
                     song = song1;
                 }
             }
@@ -103,8 +106,10 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             song.setGenre(genre);
             song.setLength(metadata.getLengthInSeconds());
             song.setFilename(metadata.getPath());
+            song = songRepository.saveAndFlush(song);
+            logger.info("Song object created: " + song);
         }
-        return songRepository.saveAndFlush(song);
+        return song;
     }
 }
 
