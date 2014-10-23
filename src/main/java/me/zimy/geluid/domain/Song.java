@@ -30,10 +30,6 @@ public class Song extends IdSuperclass {
     @JsonBackReference
     Genre genre;
 
-    public long getLength() {
-        return length;
-    }
-
     public void setLength(long length) {
         this.length = length;
     }
@@ -71,22 +67,6 @@ public class Song extends IdSuperclass {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Song song = (Song) o;
-        return length == song.length && !(album != null ? !album.equals(song.album) : song.album != null) && !(filename != null ? !filename.equals(song.filename) : song.filename != null);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (filename != null ? filename.hashCode() : 0);
-        return result;
     }
 
     @Override

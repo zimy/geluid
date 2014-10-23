@@ -1,7 +1,9 @@
 package me.zimy.geluid.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import me.zimy.geluid.domain.MappedSuperclasses.IdSuperclass;
 
 import javax.persistence.Entity;
@@ -15,31 +17,25 @@ import java.util.Set;
 @Entity
 public class Album extends IdSuperclass {
     @OneToMany
+    @JsonIgnore
     @JsonManagedReference
     Set<Song> songs;
     @ManyToOne
     @JsonBackReference
     Author author;
 
-    public Set<Song> getSongs() {
-        return songs;
+    @JsonProperty
+    public Long getSongsValue() {
+        return songs == null ? 0L : songs.size();
     }
 
+    @JsonProperty
     public String getAuthorValue() {
         return author.getName();
     }
 
     public void setAuthor(Author author) {
         this.author = author;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Album album = (Album) o;
-        return !(author != null ? !author.equals(album.author) : album.author != null);
     }
 
     @Override
