@@ -105,6 +105,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
         }
         if (song == null) {
             song = new Song();
+            song.setName(metadata.getTitle());
             song.setAuthor(author);
             song.setAlbum(album);
             song.setGenre(genre);
