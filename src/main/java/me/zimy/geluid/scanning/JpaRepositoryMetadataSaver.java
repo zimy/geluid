@@ -37,8 +37,12 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
     @Override
     public void persistAudio(Path file, ServerInformatory informatory1) {
         AudioFileMetadata metadata = informatory1.getMetadata(file.toString());
-        logger.info("Supported content found at " + metadata.getPath());
-        createOrFindSong(metadata);
+        if (metadata != null) {
+            logger.info("Supported content found at " + metadata.getPath());
+            createOrFindSong(metadata);
+        } else {
+            logger.error("SHIT found at " + file.toString());
+        }
     }
 
     public Genre createOrFindGenre(String name) {
