@@ -1,13 +1,13 @@
 package me.zimy.geluid.controllers;
 
+import me.zimy.geluid.domain.Song;
 import me.zimy.geluid.player.ServerPlayerInterface;
 import me.zimy.geluid.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Dmitriy &lt;Zimy(x)&gt; Yakovlev
@@ -22,11 +22,19 @@ public class PlayerController {
     SongRepository songRepository;
 
     @ResponseBody
-    @RequestMapping(value = "/playall", method = RequestMethod.GET)
+    @RequestMapping(value = "/play/all", method = RequestMethod.GET)
     public String playAll() {
         playerInterface.setPlayList(songRepository.findAll());
         playerInterface.play();
         return "Started";
+    }
+
+    @RequestMapping(value = "/play/list", method = RequestMethod.POST, consumes = "application/json")
+    public String playlist(@RequestBody List<Song> songs) {
+        playerInterface.stop();
+        playerInterface.setPlayList(songs);
+        playerInterface.play();
+        return "CHANGED";
     }
 
     @ResponseBody
@@ -48,6 +56,13 @@ public class PlayerController {
     public String pause() {
         playerInterface.pause();
         return "PAUSE";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/resume", method = RequestMethod.GET)
+    public String resume() {
+        playerInterface.resume();
+        return "RESUME";
     }
 
     @ResponseBody
