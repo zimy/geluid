@@ -34,8 +34,16 @@ public class Album extends IdSuperclass {
         return author.getName();
     }
 
+    public Author getAuthor() {
+        return author;
+    }
+
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public Set<Song> getSongs() {
+        return songs;
     }
 
     @Override

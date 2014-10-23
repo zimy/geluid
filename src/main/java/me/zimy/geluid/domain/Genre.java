@@ -24,6 +24,10 @@ public class Genre extends IdSuperclass {
         return songs == null ? 0L : songs.size();
     }
 
+    public Set<Song> getSongs() {
+        return songs;
+    }
+
     @Override
     public String toString() {
         return "{" +

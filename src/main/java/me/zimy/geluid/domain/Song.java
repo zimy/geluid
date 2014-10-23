@@ -30,10 +30,6 @@ public class Song extends IdSuperclass {
     @JsonBackReference
     Genre genre;
 
-    public void setLength(long length) {
-        this.length = length;
-    }
-
     public String getFilename() {
         return filename;
     }
@@ -42,13 +38,41 @@ public class Song extends IdSuperclass {
         this.filename = filename;
     }
 
-    @JsonProperty
-    public String getAlbumValue() {
-        return album.getName();
+    public long getLength() {
+        return length;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public Album getAlbum() {
+        return album;
     }
 
     public void setAlbum(Album album) {
         this.album = album;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    @JsonProperty
+    public String getAlbumValue() {
+        return album.getName();
     }
 
     @JsonProperty
@@ -56,17 +80,9 @@ public class Song extends IdSuperclass {
         return author.getName();
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
     @JsonProperty
     public String getGenreValue() {
         return genre.getName();
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
     }
 
     @Override

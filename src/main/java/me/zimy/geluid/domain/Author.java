@@ -33,6 +33,14 @@ public class Author extends IdSuperclass {
         return songs == null ? 0L : songs.size();
     }
 
+    public Set<Album> getAlbums() {
+        return albums;
+    }
+
+    public Set<Song> getSongs() {
+        return songs;
+    }
+
     @Override
     public String toString() {
         return "{" +
