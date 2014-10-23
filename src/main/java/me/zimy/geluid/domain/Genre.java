@@ -7,6 +7,7 @@ import me.zimy.geluid.domain.MappedSuperclasses.IdSuperclass;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,7 +18,7 @@ public class Genre extends IdSuperclass {
     @OneToMany
     @JsonIgnore
     @JsonManagedReference
-    Set<Song> songs;
+    Set<Song> songs = new HashSet<>();
 
     @JsonProperty
     public Long getSongsValue() {

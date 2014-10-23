@@ -85,6 +85,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             album.setName(name);
             album.setAuthor(author);
             album = albumRepository.saveAndFlush(album);
+            author.getAlbums().add(album);
             logger.info("Album object created: " + album);
         }
         return album;
@@ -112,6 +113,9 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             song.setLength(metadata.getLengthInSeconds());
             song.setFilename(metadata.getPath());
             song = songRepository.saveAndFlush(song);
+            genre.getSongs().add(song);
+            album.getSongs().add(song);
+            author.getSongs().add(song);
             logger.info("Song object created: " + song);
         }
         return song;
