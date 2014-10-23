@@ -1,5 +1,6 @@
 package me.zimy.geluid.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import me.zimy.geluid.domain.MappedSuperclasses.IdSuperclass;
 
 import javax.persistence.Entity;
@@ -12,8 +13,10 @@ import java.util.Set;
 @Entity
 public class Author extends IdSuperclass {
     @OneToMany
+    @JsonManagedReference
     Set<Album> albums;
     @OneToMany
+    @JsonManagedReference
     Set<Song> songs;
 
     public Set<Album> getAlbums() {

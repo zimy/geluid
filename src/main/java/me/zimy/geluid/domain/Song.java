@@ -1,5 +1,7 @@
 package me.zimy.geluid.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import me.zimy.geluid.domain.MappedSuperclasses.IdSuperclass;
 
 import javax.persistence.Entity;
@@ -11,12 +13,16 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Song extends IdSuperclass {
     long length;
+    @JsonIgnore
     String filename;
     @ManyToOne
+    @JsonBackReference
     Album album;
     @ManyToOne
+    @JsonBackReference
     Author author;
     @ManyToOne
+    @JsonBackReference
     Genre genre;
 
     public long getLength() {
