@@ -1,7 +1,7 @@
 package me.zimy.geluid.informatories;
 
 /**
- * @author Dmitriy &lt;Shnay&gt; Eremein
+ * @author Dmitriy &lt;Shnay&gt; Eremin
  */
 public class AudioFileMetadata {
     String path;

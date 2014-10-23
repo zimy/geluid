@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Dmitriy &lt;Shnay&gt; Eremein
+ * @author Dmitriy &lt;Shnay&gt; Eremin
  */
 @Component
 public class Mp3Informatory implements ServerInformatory {

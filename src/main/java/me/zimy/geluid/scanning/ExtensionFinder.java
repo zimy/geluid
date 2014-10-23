@@ -1,7 +1,7 @@
 package me.zimy.geluid.scanning;
 
 /**
- * @author Dmitriy &lt;Shnay&gt; Eremein
+ * @author Dmitriy &lt;Shnay&gt; Eremin
  */
 public class ExtensionFinder {
     public static String getExtension(String fileName) {

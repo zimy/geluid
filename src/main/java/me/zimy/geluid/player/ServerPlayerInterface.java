@@ -4,6 +4,9 @@ import me.zimy.geluid.domain.Song;
 
 import java.util.List;
 
+/**
+ * @author Dmitriy &lt;Shnay&gt; Eremin
+ */
 public interface ServerPlayerInterface {
     void play();
 

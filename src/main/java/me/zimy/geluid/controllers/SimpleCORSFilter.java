@@ -6,6 +6,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @author Dmitriy &lt;Zimy(x)&gt; Yakovlev
+ */
 @Component
 public class SimpleCORSFilter implements Filter {
 
