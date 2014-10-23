@@ -45,6 +45,41 @@ public class ServerPlayer implements ServerPlayerInterface {
         }
     }
 
+    void playInternal() {
+        while (playerStatus != PlayerStatus.FINISHED) {
+            final File file = new File(playList.get(current).getFilename());
+            try (final AudioInputStream in = getAudioInputStream(file)) {
+                final AudioFormat outFormat = getOutFormat(in.getFormat());
+                final Info info = new Info(SourceDataLine.class, outFormat);
+                try (final SourceDataLine line = (SourceDataLine) AudioSystem
+                        .getLine(info)) {
+                    if (line != null) {
+                        line.open(outFormat);
+                        line.start();
+                        stream(getAudioInputStream(outFormat, in), line);
+                        line.drain();
+                        line.stop();
+                    }
+                }
+            } catch (UnsupportedAudioFileException | LineUnavailableException
+                    | IOException e) {
+                throw new IllegalStateException(e);
+            }
+            synchronized (playerLock) {
+                while (playerStatus == PlayerStatus.PAUSED) {
+                    try {
+                        playerLock.wait();
+                    } catch (final InterruptedException e) {
+                        break;
+                    }
+                }
+            }
+        }
+        synchronized (playerLock) {
+            playerStatus = PlayerStatus.FINISHED;
+        }
+    }
+
     @Override
     public void pause() {
         synchronized (playerLock) {
@@ -76,12 +111,35 @@ public class ServerPlayer implements ServerPlayerInterface {
     public void setCurrent(int title) {
         current = title;
         stop();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitPlease();
         play();
+    }
+
+    private AudioFormat getOutFormat(AudioFormat inFormat) {
+        final int ch = inFormat.getChannels();
+        final float rate = inFormat.getSampleRate();
+        return new AudioFormat(PCM_SIGNED, rate, 16, ch, ch * 2, rate, false);
+    }
+
+    private boolean stream(AudioInputStream in, SourceDataLine line)
+            throws IOException {
+        final byte[] buffer = new byte[65536];
+        for (int n = 0; n != -1; n = in.read(buffer, 0, buffer.length)) {
+            while (playerStatus == PlayerStatus.PAUSED) {
+                try {
+                    Thread.sleep(75);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (playerStatus == PlayerStatus.STOPPED) {
+                return
+                        false;
+            }
+
+            line.write(buffer, 0, n);
+        }
+        return true;
     }
 
     @Override
@@ -96,11 +154,7 @@ public class ServerPlayer implements ServerPlayerInterface {
         current++;
         current %= playList.size();
         stop();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitPlease();
         play();
     }
 
@@ -109,17 +163,23 @@ public class ServerPlayer implements ServerPlayerInterface {
         current--;
         current %= playList.size();
         stop();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitPlease();
         play();
     }
 
     @Override
     public Song current() {
-        return current != -1 ? playList.get(current) : null;
+        if (current != -1)
+            return playList.get(current);
+        return null;
+    }
+
+    void waitPlease() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private enum PlayerStatus {
@@ -134,51 +194,7 @@ public class ServerPlayer implements ServerPlayerInterface {
         @Override
         public void run() {
             while (true) {
-                AudioFormat outFormat;
-                Info info;
-                while (playerStatus != PlayerStatus.FINISHED) {
-                    try (AudioInputStream in = getAudioInputStream(new File(playList.get(current).getFilename()))) {
-                        AudioFormat inFormat = in.getFormat();
-                        final int ch = inFormat.getChannels();
-                        final float rate = inFormat.getSampleRate();
-                        outFormat = new AudioFormat(PCM_SIGNED, rate, 16, ch, ch * 2, rate, false);
-                        info = new Info(SourceDataLine.class, outFormat);
-                        try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
-                            if (line != null) {
-                                line.open(outFormat);
-                                line.start();
-                                final byte[] buffer = new byte[65536];
-                                for (int n = 0; n != -1 && playerStatus != PlayerStatus.STOPPED; n = getAudioInputStream(outFormat, in).read(buffer, 0, buffer.length)) {
-                                    while (playerStatus == PlayerStatus.PAUSED) {
-                                        try {
-                                            Thread.sleep(75);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                    line.write(buffer, 0, n);
-                                }
-                                line.drain();
-                                line.stop();
-                            }
-                        }
-                    } catch (UnsupportedAudioFileException | LineUnavailableException
-                            | IOException e) {
-                        throw new IllegalStateException(e);
-                    }
-                    synchronized (playerLock) {
-                        while (playerStatus == PlayerStatus.PAUSED) {
-                            try {
-                                playerLock.wait();
-                            } catch (final InterruptedException e) {
-                                break;
-                            }
-                        }
-                    }
-                }
-                synchronized (playerLock) {
-                    playerStatus = PlayerStatus.FINISHED;
-                }
+                playInternal();
                 next();
             }
         }
