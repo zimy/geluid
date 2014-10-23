@@ -45,9 +45,8 @@ public class GenreController {
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public Genre removeOne(@PathVariable Long id) {
-        Genre genre = repository.findOne(id);
+    public String removeOne(@PathVariable Long id) {
         repository.delete(id);
-        return genre;
+        return "OK";
     }
 }
