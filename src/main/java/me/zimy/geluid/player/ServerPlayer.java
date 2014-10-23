@@ -9,47 +9,36 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 import static javax.sound.sampled.AudioSystem.getAudioInputStream;
 
+/**
+ * @author Dmitriy &lt;Shnay&gt; Eremin
+ */
 @Component
-public class ServerPlayer implements ServerPlayerInterface, Runnable {
+public class ServerPlayer implements ServerPlayerInterface {
 
-    private final static int NOTSTARTED = 0;
-    private int playerStatus = NOTSTARTED;
-    private final static int PLAYING = 1;
-    private final static int PAUSED = 2;
-    private final static int FINISHED = 3;
-    private final static int STOPPED = 0;
+    private static final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 2, 5000, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
     private final Object playerLock = new Object();
     List<Song> playList = new ArrayList<>();
     int current;
+    private PlayerStatus playerStatus = PlayerStatus.INITIAL;
 
     @Override
     public void play() {
         synchronized (playerLock) {
             switch (playerStatus) {
-                case NOTSTARTED:
-                    final Runnable r = new Runnable() {
-                        public void run() {
-
-                            while (true) {
-                                playInternal();
-                                next();
-                            }
-                        }
-                    };
-                    final Thread t = new Thread(r);
-// t.setDaemon(true);
-// t.setPriority(Thread.MAX_PRIORITY);
-                    playerStatus = PLAYING;
-                    t.start();
+                case INITIAL:
+                    threadPoolExecutor.execute(new InnerOperation());
+                    playerStatus = PlayerStatus.PLAYING;
                     break;
                 case PAUSED:
                     resume();
                     break;
-
                 default:
                     break;
             }
@@ -57,18 +46,13 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
     }
 
     void playInternal() {
-
-        while (playerStatus != FINISHED) {
+        while (playerStatus != PlayerStatus.FINISHED) {
             final File file = new File(playList.get(current).getFilename());
-
             try (final AudioInputStream in = getAudioInputStream(file)) {
-
                 final AudioFormat outFormat = getOutFormat(in.getFormat());
                 final Info info = new Info(SourceDataLine.class, outFormat);
-
                 try (final SourceDataLine line = (SourceDataLine) AudioSystem
                         .getLine(info)) {
-
                     if (line != null) {
                         line.open(outFormat);
                         line.start();
@@ -77,52 +61,48 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
                         line.stop();
                     }
                 }
-
             } catch (UnsupportedAudioFileException | LineUnavailableException
                     | IOException e) {
                 throw new IllegalStateException(e);
             }
             synchronized (playerLock) {
-                while (playerStatus == PAUSED) {
+                while (playerStatus == PlayerStatus.PAUSED) {
                     try {
                         playerLock.wait();
                     } catch (final InterruptedException e) {
-// terminate player
                         break;
                     }
                 }
             }
         }
-
-        close();
-
-    }
-
-    @Override
-    public boolean pause() {
         synchronized (playerLock) {
-            if (playerStatus == PLAYING) {
-                playerStatus = PAUSED;
-            }
-            return playerStatus == PAUSED;
+            playerStatus = PlayerStatus.FINISHED;
         }
     }
 
     @Override
-    public boolean resume() {
+    public void pause() {
         synchronized (playerLock) {
-            if (playerStatus == PAUSED) {
-                playerStatus = PLAYING;
+            if (playerStatus == PlayerStatus.PLAYING) {
+                playerStatus = PlayerStatus.PAUSED;
+            }
+        }
+    }
+
+    @Override
+    public void resume() {
+        synchronized (playerLock) {
+            if (playerStatus == PlayerStatus.PAUSED) {
+                playerStatus = PlayerStatus.PLAYING;
                 playerLock.notifyAll();
             }
-            return playerStatus == PLAYING;
         }
     }
 
     @Override
     public void stop() {
         synchronized (playerLock) {
-            playerStatus = STOPPED;
+            playerStatus = PlayerStatus.STOPPED;
             playerLock.notifyAll();
         }
     }
@@ -135,13 +115,6 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
         play();
     }
 
-    public void close() {
-        synchronized (playerLock) {
-            playerStatus = FINISHED;
-        }
-
-    }
-
     private AudioFormat getOutFormat(AudioFormat inFormat) {
         final int ch = inFormat.getChannels();
         final float rate = inFormat.getSampleRate();
@@ -152,21 +125,20 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
             throws IOException {
         final byte[] buffer = new byte[65536];
         for (int n = 0; n != -1; n = in.read(buffer, 0, buffer.length)) {
-
-            while (playerStatus == PAUSED)
+            while (playerStatus == PlayerStatus.PAUSED) {
                 try {
                     Thread.sleep(75);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-            if (playerStatus == STOPPED)
+            }
+            if (playerStatus == PlayerStatus.STOPPED) {
                 return
                         false;
+            }
 
             line.write(buffer, 0, n);
         }
-
         return true;
     }
 
@@ -179,7 +151,6 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
 
     @Override
     public void next() {
-
         current++;
         current %= playList.size();
         stop();
@@ -189,7 +160,6 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
 
     @Override
     public void previous() {
-
         current--;
         current %= playList.size();
         stop();
@@ -204,17 +174,29 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
         return null;
     }
 
-    @Override
-    public void run() {
-        play();
-    }
-
-
     void waitPlease() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private enum PlayerStatus {
+        INITIAL,
+        PLAYING,
+        PAUSED,
+        FINISHED,
+        STOPPED
+    }
+
+    private class InnerOperation implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                playInternal();
+                next();
+            }
         }
     }
 }

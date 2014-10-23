@@ -10,7 +10,7 @@ import java.util.List;
 public interface ServerPlayerInterface {
     void play();
 
-    boolean pause();
+    void pause();
 
     void setPlayList(List<Song> playList);
 
@@ -20,7 +20,7 @@ public interface ServerPlayerInterface {
 
     Song current();
 
-    boolean resume();
+    void resume();
 
     void stop();
 
