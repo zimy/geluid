@@ -1,16 +1,15 @@
 package me.zimy.geluid.controllers;
 
-import me.zimy.geluid.domain.Album;
-import me.zimy.geluid.domain.Author;
-import me.zimy.geluid.domain.Genre;
 import me.zimy.geluid.domain.Song;
+import me.zimy.geluid.repositories.AlbumRepository;
+import me.zimy.geluid.repositories.AuthorRepository;
+import me.zimy.geluid.repositories.GenreRepository;
 import me.zimy.geluid.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Dmitriy &lt;Zimy(x)&gt; Yakovlev
@@ -20,6 +19,12 @@ import java.util.Set;
 public class SongController {
     @Autowired
     private SongRepository repository;
+    @Autowired
+    private AuthorRepository authorRepository;
+    @Autowired
+    private GenreRepository genreRepository;
+    @Autowired
+    private AlbumRepository albumRepository;
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET)
@@ -40,14 +45,6 @@ public class SongController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.POST)
-    public Song post(@RequestParam String name) {
-        Song song = new Song();
-        song.setName(name);
-        return repository.saveAndFlush(song);
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String removeOne(@PathVariable Long id) {
         repository.delete(id);
@@ -55,28 +52,39 @@ public class SongController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/album/{songid}", method = RequestMethod.GET)
-    public Set<Song> getByAlbum(@PathVariable Long id) {
-        Song that = repository.getOne(id);
-        Album album = that.getAlbum();
-        return album.getSongs();
+    @RequestMapping(value = "/album/{id}", method = RequestMethod.GET)
+    public List<Song> getByAlbum(@PathVariable Long id) {
+        return repository.findByAlbum(repository.getOne(id).getAlbum());
     }
 
     @ResponseBody
     @RequestMapping(value = "/author/{id}", method = RequestMethod.GET)
-    public Set<Song> getByAuthor(@PathVariable Long id) {
-        Song that = repository.getOne(id);
-        Author author = that.getAuthor();
-        return author.getSongs();
+    public List<Song> getByAuthor(@PathVariable Long id) {
+        return repository.findByAuthor(repository.getOne(id).getAuthor());
     }
 
 
     @ResponseBody
     @RequestMapping(value = "/genre/{id}", method = RequestMethod.GET)
-    public Set<Song> getByGenre(@PathVariable Long id) {
-        Song that = repository.getOne(id);
-        Genre author = that.getGenre();
-        return author.getSongs();
+    public List<Song> getByGenre(@PathVariable Long id) {
+        return repository.findByGenre(repository.findOne(id).getGenre());
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/author/all/{id}", method = RequestMethod.GET)
+    public List<Song> getAuthorAll(@PathVariable Long id) {
+        return repository.findByAuthor(authorRepository.getOne(id));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/genre/all/{id}", method = RequestMethod.GET)
+    public List<Song> getGenreAll(@PathVariable Long id) {
+        return repository.findByGenre(genreRepository.getOne(id));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/album/all/{id}", method = RequestMethod.GET)
+    public List<Song> getAlbumAll(@PathVariable Long id) {
+        return repository.findByAlbum(albumRepository.getOne(id));
+    }
 }
