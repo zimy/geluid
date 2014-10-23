@@ -25,8 +25,8 @@ public class Album extends IdSuperclass {
         return songs;
     }
 
-    public Author getAuthor() {
-        return author;
+    public String getAuthorValue() {
+        return author.getName();
     }
 
     public void setAuthor(Author author) {
@@ -40,6 +40,14 @@ public class Album extends IdSuperclass {
         if (!super.equals(o)) return false;
         Album album = (Album) o;
         return !(author != null ? !author.equals(album.author) : album.author != null);
+    }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "songs: " + (songs == null ? 0 : songs.size()) +
+                ", author: \"" + (author == null ? "" : author.getName()) +
+                "\", id: " + getId() +
+                ", name: \"" + getName() + "\"}";
     }
 }

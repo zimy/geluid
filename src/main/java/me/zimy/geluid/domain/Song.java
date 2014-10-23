@@ -2,6 +2,7 @@ package me.zimy.geluid.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import me.zimy.geluid.domain.MappedSuperclasses.IdSuperclass;
 
 import javax.persistence.Column;
@@ -45,24 +46,27 @@ public class Song extends IdSuperclass {
         this.filename = filename;
     }
 
-    public Album getAlbum() {
-        return album;
+    @JsonProperty
+    public String getAlbumValue() {
+        return album.getName();
     }
 
     public void setAlbum(Album album) {
         this.album = album;
     }
 
-    public Author getAuthor() {
-        return author;
+    @JsonProperty
+    public String getAuthorValue() {
+        return author.getName();
     }
 
     public void setAuthor(Author author) {
         this.author = author;
     }
 
-    public Genre getGenre() {
-        return genre;
+    @JsonProperty
+    public String getGenreValue() {
+        return genre.getName();
     }
 
     public void setGenre(Genre genre) {
@@ -87,14 +91,13 @@ public class Song extends IdSuperclass {
 
     @Override
     public String toString() {
-        return "Song{" +
-                "length=" + length +
-                ", filename='" + filename + '\'' +
-                ", album=" + album +
-                ", author=" + author +
-                ", genre=" + genre +
-                ", name=" + getName() +
-                ", id=" + getId() +
-                '}';
+        return "{" +
+                "length: " + length +
+                ", filename: \"" + filename +
+                "\", album: \"" + (album == null ? "" : album.getName()) +
+                "\", author: \"" + (author == null ? "" : author.getName()) +
+                "\", genre: \"" + (genre == null ? "" : genre.getName()) +
+                "\", name: \"" + getName() +
+                "\", id: " + getId() + '}';
     }
 }

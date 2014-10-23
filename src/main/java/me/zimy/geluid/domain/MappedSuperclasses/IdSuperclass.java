@@ -49,9 +49,9 @@ public class IdSuperclass implements Serializable {
 
     @Override
     public String toString() {
-        return "IdSuperclass{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+        return "{" +
+                "\"id\":\"" + id +
+                "\", \"name\":\"'" + name + '\"' +
                 '}';
     }
 }

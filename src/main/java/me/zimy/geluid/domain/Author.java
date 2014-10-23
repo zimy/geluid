@@ -26,4 +26,13 @@ public class Author extends IdSuperclass {
     public Set<Song> getSongs() {
         return songs;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "albums: " + (albums == null ? 0 : albums.size()) +
+                ", songs: " + (songs == null ? 0 : songs.size()) +
+                ", id: " + getId() +
+                ", name: \"'" + getName() + "\"}";
+    }
 }

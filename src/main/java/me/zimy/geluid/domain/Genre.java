@@ -19,4 +19,12 @@ public class Genre extends IdSuperclass {
     public Set<Song> getSongs() {
         return songs;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "songs: " + (songs == null ? 0 : songs.size()) +
+                ", id: " + getId() +
+                ", name: \"'" + getName() + "\"}";
+    }
 }
