@@ -12,12 +12,13 @@ public class AudioFileMetadata {
     String album;
 
     public AudioFileMetadata(String title, long lengthInSeconds, String author,
-                             String genre, String album) {
+                             String genre, String album, String path) {
         this.album = album;
         this.author = author;
         this.genre = genre;
         this.lengthInSeconds = lengthInSeconds;
         this.title = title;
+        this.path = path;
     }
 
     public String getPath() {
@@ -43,6 +44,4 @@ public class AudioFileMetadata {
     public String getAlbum() {
         return album;
     }
-
-
 }
