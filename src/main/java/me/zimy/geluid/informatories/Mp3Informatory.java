@@ -33,7 +33,13 @@ public class Mp3Informatory implements ServerInformatory {
         } else {
             try {
                 AudioFile f = AudioFileIO.read(new File(fileName));
+                if (f == null) {
+                    return null;
+                }
                 Tag tag = f.getTag();
+                if (tag == null) {
+                    return null;
+                }
                 result = new AudioFileMetadata(tag.getFirst(FieldKey.TITLE),
                         f.getAudioHeader().getTrackLength(), tag.getFirst(FieldKey.ARTIST),
                         tag.getFirst(FieldKey.GENRE), tag.getFirst(FieldKey.ALBUM), fileName);
