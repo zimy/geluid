@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/albums")
-public class AlbomController {
+public class AlbumController {
     @Autowired
     private AlbumRepository repository;
 
