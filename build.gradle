@@ -34,10 +34,10 @@ jar {
 
 dependencies {
     testCompile 'junit:junit'
-    compile 'org.hsqldb:hsqldb'
+//    compile 'org.hsqldb:hsqldb'
+    compile 'org.apache.derby:derby:10.11.1.1'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'com.googlecode.soundlibs:mp3spi:1.9.5-1'
     compile 'com.mpatric:mp3agic:0.8.2'
     compile 'com.googlecode.soundlibs:tritonus-share:0.3.7-2'
     compile 'com.googlecode.soundlibs:mp3spi:1.9.5-1'

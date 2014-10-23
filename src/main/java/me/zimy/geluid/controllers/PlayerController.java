@@ -38,7 +38,7 @@ public class PlayerController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/play/{position", method = RequestMethod.GET)
+    @RequestMapping(value = "/play/{position}", method = RequestMethod.GET)
     public String playId(@PathVariable int position) {
         playerInterface.setCurrent(position);
         return "Changed";
