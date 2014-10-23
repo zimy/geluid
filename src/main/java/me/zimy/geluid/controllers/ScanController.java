@@ -28,6 +28,6 @@ public class ScanController {
     public String getAll(@PathVariable final Integer depth) {
         geluidScanner.setDepth(depth);
         threadPoolExecutor.execute(geluidScanner);
-        return "OK";
+        return "{\"message\":\"OK\"}";
     }
 }

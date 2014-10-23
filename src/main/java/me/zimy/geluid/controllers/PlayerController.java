@@ -26,7 +26,7 @@ public class PlayerController {
     public String playAll() {
         playerInterface.setPlayList(songRepository.findAll());
         playerInterface.play();
-        return "Started";
+        return "{\"message\":\"Started\"}";
     }
 
     @RequestMapping(value = "/play/list", method = RequestMethod.POST, consumes = "application/json")
@@ -34,48 +34,48 @@ public class PlayerController {
         playerInterface.stop();
         playerInterface.setPlayList(songs);
         playerInterface.play();
-        return "CHANGED";
+        return "{\"message\":\"CHANGED\"}";
     }
 
     @ResponseBody
     @RequestMapping(value = "/play/{position}", method = RequestMethod.GET)
     public String playId(@PathVariable int position) {
         playerInterface.setCurrent(position);
-        return "Changed";
+        return "{\"message\":\"Changed\"}";
     }
 
     @ResponseBody
     @RequestMapping(value = "/play", method = RequestMethod.GET)
     public String play() {
         playerInterface.play();
-        return "PLAY";
+        return "{\"message\":\"PLAY\"}";
     }
 
     @ResponseBody
     @RequestMapping(value = "/pause", method = RequestMethod.GET)
     public String pause() {
         playerInterface.pause();
-        return "PAUSE";
+        return "{\"message\":\"PAUSE\"}";
     }
 
     @ResponseBody
     @RequestMapping(value = "/resume", method = RequestMethod.GET)
     public String resume() {
         playerInterface.resume();
-        return "RESUME";
+        return "{\"message\":\"RESUME\"}";
     }
 
     @ResponseBody
     @RequestMapping(value = "/next", method = RequestMethod.GET)
     public String next() {
         playerInterface.next();
-        return "NEXT";
+        return "{\"message\":\"NEXT\"}";
     }
 
     @ResponseBody
     @RequestMapping(value = "/previous", method = RequestMethod.GET)
     public String previous() {
         playerInterface.previous();
-        return "PREVIOUS";
+        return "{\"message\":\"PREVIOUS\"}";
     }
 }
