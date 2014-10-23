@@ -15,4 +15,12 @@ public class Author extends IdSuperclass {
     Set<Album> albums;
     @OneToMany
     Set<Song> songs;
+
+    public Set<Album> getAlbums() {
+        return albums;
+    }
+
+    public Set<Song> getSongs() {
+        return songs;
+    }
 }

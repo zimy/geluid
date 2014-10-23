@@ -13,4 +13,8 @@ import java.util.Set;
 public class Genre extends IdSuperclass {
     @OneToMany
     Set<Song> songs;
+
+    public Set<Song> getSongs() {
+        return songs;
+    }
 }

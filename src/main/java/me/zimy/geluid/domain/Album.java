@@ -12,9 +12,20 @@ import java.util.Set;
  */
 @Entity
 public class Album extends IdSuperclass {
-    int year;
     @OneToMany
     Set<Song> songs;
     @ManyToOne
     Author author;
+
+    public Set<Song> getSongs() {
+        return songs;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
 }
