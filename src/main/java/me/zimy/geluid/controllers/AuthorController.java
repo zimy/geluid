@@ -1,6 +1,7 @@
 package me.zimy.geluid.controllers;
 
 import me.zimy.geluid.domain.Author;
+import me.zimy.geluid.repositories.AlbumRepository;
 import me.zimy.geluid.repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ import java.util.List;
 public class AuthorController {
     @Autowired
     private AuthorRepository repository;
+    @Autowired
+    private AlbumRepository albumRepository;
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET)
@@ -48,5 +51,11 @@ public class AuthorController {
     public String removeOne(@PathVariable Long id) {
         repository.delete(id);
         return "OK";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/album/{id}", method = RequestMethod.DELETE)
+    public Author getByAlbum(@PathVariable Long id) {
+        return repository.findByAlbum(albumRepository.findOne(id));
     }
 }
