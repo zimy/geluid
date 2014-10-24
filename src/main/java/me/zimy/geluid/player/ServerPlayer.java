@@ -16,21 +16,17 @@ import static javax.sound.sampled.AudioSystem.getAudioInputStream;
 @Component
 public class ServerPlayer implements ServerPlayerInterface, Runnable {
 
-    private final static int NOTSTARTED = 0;
-    private int playerStatus = NOTSTARTED;
-    private final static int PLAYING = 1;
-    private final static int PAUSED = 2;
-    private final static int FINISHED = 3;
-    private final static int STOPPED = 0;
     private final Object playerLock = new Object();
     List<Song> playList = new ArrayList<>();
     int current;
+    private State playerStatus = State.INITIAL;
 
     @Override
     public void play() {
         synchronized (playerLock) {
             switch (playerStatus) {
-                case NOTSTARTED:
+                case INITIAL:
+                case STOPPED:
                     final Runnable r = new Runnable() {
                         public void run() {
                             while (true) {
@@ -40,7 +36,7 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
                         }
                     };
                     final Thread t = new Thread(r);
-                    playerStatus = PLAYING;
+                    playerStatus = State.PLAYING;
                     t.start();
                     break;
                 case PAUSED:
@@ -53,7 +49,7 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
     }
 
     void playInternal() {
-        while (playerStatus != FINISHED) {
+        while (playerStatus != State.FINISHED) {
             final File file = new File(playList.get(current).getFilename());
             try (final AudioInputStream in = getAudioInputStream(file)) {
                 final AudioFormat outFormat = getOutFormat(in.getFormat());
@@ -73,7 +69,7 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
                 throw new IllegalStateException(e);
             }
             synchronized (playerLock) {
-                while (playerStatus == PAUSED) {
+                while (playerStatus == State.PAUSED) {
                     try {
                         playerLock.wait();
                     } catch (final InterruptedException e) {
@@ -88,8 +84,8 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
     @Override
     public void pause() {
         synchronized (playerLock) {
-            if (playerStatus == PLAYING) {
-                playerStatus = PAUSED;
+            if (playerStatus == State.PLAYING) {
+                playerStatus = State.PAUSED;
             }
         }
     }
@@ -97,8 +93,8 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
     @Override
     public void resume() {
         synchronized (playerLock) {
-            if (playerStatus == PAUSED) {
-                playerStatus = PLAYING;
+            if (playerStatus == State.PAUSED) {
+                playerStatus = State.PLAYING;
                 playerLock.notifyAll();
             }
         }
@@ -107,7 +103,7 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
     @Override
     public void stop() {
         synchronized (playerLock) {
-            playerStatus = STOPPED;
+            playerStatus = State.STOPPED;
             playerLock.notifyAll();
         }
     }
@@ -122,7 +118,7 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
 
     public void close() {
         synchronized (playerLock) {
-            playerStatus = FINISHED;
+            playerStatus = State.FINISHED;
         }
     }
 
@@ -137,14 +133,14 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
         final byte[] buffer = new byte[65536];
         for (int n = 0; n != -1; n = in.read(buffer, 0, buffer.length)) {
 
-            while (playerStatus == PAUSED)
+            while (playerStatus == State.PAUSED)
                 try {
                     Thread.sleep(75);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-            if (playerStatus == STOPPED)
+            if (playerStatus == State.STOPPED)
                 return
                         false;
 
@@ -192,12 +188,20 @@ public class ServerPlayer implements ServerPlayerInterface, Runnable {
         play();
     }
 
-
     void waitPlease() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+    enum State {
+        INITIAL,
+        PLAYING,
+        PAUSED,
+        FINISHED,
+        STOPPED
     }
 }
