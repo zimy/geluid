@@ -34,6 +34,6 @@ public class Genre extends IdSuperclass {
         return "{" +
                 "songs: " + (songs == null ? 0 : songs.size()) +
                 ", id: " + getId() +
-                ", name: \"'" + getName() + "\"}";
+                ", name: \"" + getName() + "\"}";
     }
 }

@@ -25,8 +25,16 @@ public class ScanController {
 
     @ResponseBody
     @RequestMapping(value = "/{depth}", method = RequestMethod.GET)
-    public String getAll(@PathVariable final Integer depth) {
+    public String ScanChangeable(@PathVariable final Integer depth) {
         geluidScanner.setDepth(depth);
+        threadPoolExecutor.execute(geluidScanner);
+        return "{\"message\":\"OK\"}";
+    }
+
+    @ResponseBody
+    @RequestMapping(method = RequestMethod.GET)
+    public String Scan() {
+        geluidScanner.setDepth(10);
         threadPoolExecutor.execute(geluidScanner);
         return "{\"message\":\"OK\"}";
     }

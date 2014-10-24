@@ -48,6 +48,6 @@ public class Author extends IdSuperclass {
                 "albums: " + (albums == null ? 0 : albums.size()) +
                 ", songs: " + (songs == null ? 0 : songs.size()) +
                 ", id: " + getId() +
-                ", name: \"'" + getName() + "\"}";
+                ", name: \"" + getName() + "\"}";
     }
 }

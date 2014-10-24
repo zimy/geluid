@@ -38,10 +38,10 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
     public void persistAudio(Path file, ServerInformatory informatory1) {
         AudioFileMetadata metadata = informatory1.getMetadata(file.toString());
         if (metadata != null) {
-            logger.info("Supported content found at " + metadata.getPath());
+            logger.info("Reading " + metadata.getPath());
             createOrFindSong(metadata);
         } else {
-            logger.error("SHIT found at " + file.toString());
+            logger.warn("Unreadable: " + file.toString());
         }
     }
 
@@ -51,7 +51,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             genre = new Genre();
             genre.setName(name);
             genre = genreRepository.saveAndFlush(genre);
-            logger.info("Genre object created: " + genre);
+            logger.trace("Created new genre: " + genre);
         }
         return genre;
     }
@@ -63,7 +63,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             author = new Author();
             author.setName(name);
             author = authorRepository.saveAndFlush(author);
-            logger.info("Author object created: " + author);
+            logger.trace("Created new author: " + author);
         } else {
             author = authors.get(0);
         }
@@ -86,7 +86,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             album.setAuthor(author);
             album = albumRepository.saveAndFlush(album);
             author.getAlbums().add(album);
-            logger.info("Album object created: " + album);
+            logger.trace("Created new album: " + album);
         }
         return album;
     }
@@ -116,7 +116,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             genre.getSongs().add(song);
             album.getSongs().add(song);
             author.getSongs().add(song);
-            logger.info("Song object created: " + song);
+            logger.trace("Created new sound: " + song);
         }
         return song;
     }
