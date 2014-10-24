@@ -56,6 +56,6 @@ public class AuthorController {
     @ResponseBody
     @RequestMapping(value = "/album/{id}", method = RequestMethod.DELETE)
     public Author getByAlbum(@PathVariable Long id) {
-        return repository.findByAlbum(albumRepository.findOne(id));
+        return (albumRepository.findOne(id)).getAuthor();
     }
 }
