@@ -35,7 +35,6 @@ jar {
 dependencies {
     testCompile 'junit:junit'
     compile 'org.hsqldb:hsqldb'
-//    compile 'org.apache.derby:derby:10.11.1.1'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'com.mpatric:mp3agic:0.8.2'
@@ -43,5 +42,9 @@ dependencies {
     compile 'com.googlecode.soundlibs:mp3spi:1.9.5-1'
     compile 'com.googlecode.soundlibs:vorbisspi:1.0.3-1'
     compile 'org:jaudiotagger:2.0.3'
+    compile 'org.webjars:jquery:2.1.1'
+    compile 'org.webjars:jquery-ui:1.11.1'
+    compile 'org.webjars:jquery-bem:d8aa79d'
+
 //    compile 'org.springframework.boot:spring-boot-starter-remote-shell'
 }
