@@ -54,13 +54,13 @@ public class SongController {
     @ResponseBody
     @RequestMapping(value = "/album/{id}", method = RequestMethod.GET)
     public List<Song> getByAlbum(@PathVariable Long id) {
-        return repository.findByAlbum(repository.getOne(id).getAlbum());
+        return repository.findByAlbum(repository.findOne(id).getAlbum());
     }
 
     @ResponseBody
     @RequestMapping(value = "/author/{id}", method = RequestMethod.GET)
     public List<Song> getByAuthor(@PathVariable Long id) {
-        return repository.findByAuthor(repository.getOne(id).getAuthor());
+        return repository.findByAuthor(repository.findOne(id).getAuthor());
     }
 
 
@@ -73,18 +73,18 @@ public class SongController {
     @ResponseBody
     @RequestMapping(value = "/author/all/{id}", method = RequestMethod.GET)
     public List<Song> getAuthorAll(@PathVariable Long id) {
-        return repository.findByAuthor(authorRepository.getOne(id));
+        return repository.findByAuthor(authorRepository.findOne(id));
     }
 
     @ResponseBody
     @RequestMapping(value = "/genre/all/{id}", method = RequestMethod.GET)
     public List<Song> getGenreAll(@PathVariable Long id) {
-        return repository.findByGenre(genreRepository.getOne(id));
+        return repository.findByGenre(genreRepository.findOne(id));
     }
 
     @ResponseBody
     @RequestMapping(value = "/album/all/{id}", method = RequestMethod.GET)
     public List<Song> getAlbumAll(@PathVariable Long id) {
-        return repository.findByAlbum(albumRepository.getOne(id));
+        return repository.findByAlbum(albumRepository.findOne(id));
     }
 }
