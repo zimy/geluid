@@ -6,7 +6,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.9.RELEASE")
+        classpath "com.sarhanm:gradle-versioner:+@jar"
         classpath 'com.haunted.gradle-plugins:save-ssd:+@jar'
     }
 }
@@ -16,24 +17,27 @@ repositories {
     mavenCentral()
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+    distributionUrl = 'http://services.gradle.org/distributions/gradle-2.1-all.zip'
+}
+
+apply plugin: 'com.sarhanm.versioner'
 apply plugin: 'save-ssd'
 apply plugin: 'spring-boot'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = 1.7
-
-version = '0.1'
-
 jar {
     baseName = 'Geluid'
-    version = '0.0.1'
 }
 
 dependencies {
     testCompile 'junit:junit'
+    testRuntime 'com.jayway.jsonpath:json-path'
+    testCompile 'org.mockito:mockito-core'
+    testCompile 'org.springframework:spring-test'
     compile 'org.hsqldb:hsqldb'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-web'
@@ -45,6 +49,4 @@ dependencies {
     compile 'org.webjars:jquery:2.1.1'
     compile 'org.webjars:jquery-ui:1.11.1'
     compile 'org.webjars:jquery-bem:d8aa79d'
-
-//    compile 'org.springframework.boot:spring-boot-starter-remote-shell'
 }
