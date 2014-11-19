@@ -17,7 +17,6 @@ import java.util.Set;
 public class Author extends IdSuperclass {
     @OneToMany
     @JsonIgnore
-    @JsonManagedReference
     Set<Album> albums = new HashSet<>();
     @OneToMany
     @JsonIgnore

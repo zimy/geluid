@@ -2,7 +2,6 @@ package me.zimy.geluid.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import me.zimy.geluid.domain.MappedSuperclasses.IdSuperclass;
 
@@ -19,7 +18,6 @@ import java.util.Set;
 public class Album extends IdSuperclass {
     @OneToMany
     @JsonIgnore
-    @JsonManagedReference
     Set<Song> songs = new HashSet<>();
     @ManyToOne
     @JsonBackReference
