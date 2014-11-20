@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: Geluid
+  datasource:
+    url: jdbc:hsqldb:file:./.hsqldb/wHole
+    driverClassName: org.hsqldb.jdbcDriver
+server:
+  port: 0
+logging:
+  level: info
+  file: /tmp/Geluid/application.log
+music:
+  location:
+    - .
+---
+
+spring:
+  profiles: development
+  jpa:
+    show-sql: true
+    hibernate.ddl-auto: update
+  datasource:
+      url: jdbc:hsqldb:mem:wHole
+      driverClassName: org.hsqldb.jdbcDriver
+logging:
+  level: trace
+  file: ./.logfile.log
+http:
+  mappers:
+    json-pretty-print: false
+    json-sort-keys: true
+---

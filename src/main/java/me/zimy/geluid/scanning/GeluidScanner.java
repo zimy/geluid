@@ -1,9 +1,10 @@
 package me.zimy.geluid.scanning;
 
+import me.zimy.geluid.MusicLocationList;
 import me.zimy.geluid.informatories.ServerInformatory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @author Dmitriy &lt;Zimy(x)&gt; Yakovlev
  */
 @Component
+@ConfigurationProperties(prefix = "music")
 public class GeluidScanner implements Runnable {
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(GeluidScanner.class);
     private final EnumSet<FileVisitOption> set = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
@@ -26,11 +28,12 @@ public class GeluidScanner implements Runnable {
     Collection<ServerInformatory> informatory;
     @Autowired
     AudioSaver saver;
-    @Value("${music.directory}")
-    private String musicDir;
+    @Autowired
+    MusicLocationList locationList;
+
     private int depth = 10;
 
-    public static Map<String, ServerInformatory> getMapping(Collection<ServerInformatory> serverInformatory) {
+    private static Map<String, ServerInformatory> getMapping(Collection<ServerInformatory> serverInformatory) {
         Map<String, ServerInformatory> available = new HashMap<>();
         for (ServerInformatory informatory : serverInformatory) {
             for (String extension : informatory.getAvailableExtensions()) {
@@ -46,13 +49,15 @@ public class GeluidScanner implements Runnable {
 
     @Override
     public void run() {
-        logger.info("File scanning started " + musicDir);
-        try {
-            Map<String, ServerInformatory> available = getMapping(informatory);
-            Files.walkFileTree(Paths.get(musicDir).toAbsolutePath(), set, depth, new GeluidVisitor(available, saver));
-        } catch (IOException e) {
-            logger.info("File scanning failed:" + e.getMessage());
+        Map<String, ServerInformatory> available = getMapping(informatory);
+        for (String s : locationList.getLocation()) {
+            logger.info("File scanning started " + s);
+            try {
+                Files.walkFileTree(Paths.get(s).toAbsolutePath(), set, depth, new GeluidVisitor(available, saver));
+            } catch (IOException e) {
+                logger.info("File scanning failed:" + e.getMessage());
+            }
+            logger.info("File scanning ended in " + s);
         }
-        logger.info("File scanning ended");
     }
 }

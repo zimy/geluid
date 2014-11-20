@@ -1,4 +1,4 @@
-geluid
+geluid [![Build Status](https://travis-ci.org/zimy/geluid.svg?branch=master)](https://travis-ci.org/zimy/geluid)
 ======
 
 geluid - music player server with a web-based user interface
@@ -17,3 +17,27 @@ or directly launch application
 ```shell
 gradlew clean bootRun
 ```
+You can specify music directory two ways:
+
+The first is to use command line arguments:
+
+```shell
+--music.location\[0\]=/your/music/directory --music.location\[1\]=/your/second/music/directory
+```
+
+You can specify as many as you wish.
+
+The second is using YAML:
+
+application.yaml:
+```yaml
+music:
+  location:
+    - .
+    - /my/first/music
+    - /my/second/music
+    - /my/mounted/ftp/directory/with/music
+    - /my/sshfs/mounted/directory
+    - /tmp
+```
+Like in command line variant, you can add as many as you wish them
