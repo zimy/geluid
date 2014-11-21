@@ -22,11 +22,11 @@ public class Mp3Informatory implements ServerInformatory {
     {
         ext.add("mp3");
         ext.add("ogg");
+        ext.add("flac");
     }
 
     @Override
     public AudioFileMetadata getMetadata(String fileName) {
-
         AudioFileMetadata result = null;
         if (!ext.contains(ExtensionFinder.getExtension(fileName))) {
             result = null;
