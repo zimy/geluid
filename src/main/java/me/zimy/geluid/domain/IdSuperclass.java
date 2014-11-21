@@ -1,4 +1,4 @@
-package me.zimy.geluid.domain.MappedSuperclasses;
+package me.zimy.geluid.domain;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @SuppressWarnings("UnusedDeclaration")
 @MappedSuperclass
-public class IdSuperclass implements Serializable {
+public abstract class IdSuperclass implements Serializable {
     @Id
     @GeneratedValue
     long id;
