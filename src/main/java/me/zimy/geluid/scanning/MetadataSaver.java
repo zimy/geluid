@@ -6,10 +6,10 @@ import me.zimy.geluid.domain.Genre;
 import me.zimy.geluid.domain.Song;
 import me.zimy.geluid.informatories.AudioFileMetadata;
 import me.zimy.geluid.informatories.ServerInformatory;
-import me.zimy.geluid.repositories.AlbumRepository;
-import me.zimy.geluid.repositories.AuthorRepository;
-import me.zimy.geluid.repositories.GenreRepository;
-import me.zimy.geluid.repositories.SongRepository;
+import me.zimy.geluid.services.AlbumService;
+import me.zimy.geluid.services.AuthorService;
+import me.zimy.geluid.services.GenreService;
+import me.zimy.geluid.services.SongService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,16 +23,16 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class JpaRepositoryMetadataSaver implements AudioSaver {
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(JpaRepositoryMetadataSaver.class);
+public class MetadataSaver implements AudioSaver {
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(MetadataSaver.class);
     @Autowired
-    AlbumRepository albumRepository;
+    AlbumService albumService;
     @Autowired
-    AuthorRepository authorRepository;
+    AuthorService authorService;
     @Autowired
-    GenreRepository genreRepository;
+    GenreService genreService;
     @Autowired
-    SongRepository songRepository;
+    SongService songService;
 
     @Override
     public void persistAudio(Path file, ServerInformatory informatory1) {
@@ -46,24 +46,24 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
     }
 
     public Genre createOrFindGenre(String name) {
-        Genre genre = genreRepository.findByName(name);
+        Genre genre = genreService.findByName(name);
         if (genre == null) {
             genre = new Genre();
             genre.setName(name);
-            genre = genreRepository.saveAndFlush(genre);
-            logger.trace("Created new genre: " + genre);
+            genre = genreService.save(genre);
+            logger.info("Created new genre: " + genre);
         }
         return genre;
     }
 
     public Author createOrFindAuthor(String name) {
         Author author;
-        List<Author> authors = authorRepository.findByName(name);
+        List<Author> authors = authorService.findByName(name);
         if (authors == null || authors.size() == 0) {
             author = new Author();
             author.setName(name);
-            author = authorRepository.saveAndFlush(author);
-            logger.trace("Created new author: " + author);
+            author = authorService.save(author);
+            logger.info("Created new author: " + author);
         } else {
             author = authors.get(0);
         }
@@ -72,7 +72,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
 
     public Album createOrFindAlbum(String name, Author author) {
         Album album = null;
-        List<Album> albumsByAuthor = albumRepository.findByAuthor(author);
+        List<Album> albumsByAuthor = albumService.findByAuthor(author);
         if (albumsByAuthor != null && albumsByAuthor.size() != 0) {
             for (Album album1 : albumsByAuthor) {
                 if (album1.getName().equals(name)) {
@@ -84,9 +84,9 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             album = new Album();
             album.setName(name);
             album.setAuthor(author);
-            album = albumRepository.saveAndFlush(album);
+            album = albumService.save(album);
             author.getAlbums().add(album);
-            logger.trace("Created new album: " + album);
+            logger.info("Created new album: " + album);
         }
         return album;
     }
@@ -96,7 +96,7 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
         Author author = createOrFindAuthor(metadata.getAuthor());
         Album album = createOrFindAlbum(metadata.getAlbum(), author);
         Song song = null;
-        List<Song> getByAlbum = songRepository.findByAlbum(album);
+        List<Song> getByAlbum = songService.findByAlbum(album);
         if (getByAlbum != null && getByAlbum.size() != 0) {
             for (Song song1 : getByAlbum) {
                 if (metadata.getTitle().equals(song1.getName())) {
@@ -112,11 +112,11 @@ public class JpaRepositoryMetadataSaver implements AudioSaver {
             song.setGenre(genre);
             song.setLength(metadata.getLengthInSeconds());
             song.setFilename(metadata.getPath());
-            song = songRepository.saveAndFlush(song);
+            song = songService.save(song);
             genre.getSongs().add(song);
             album.getSongs().add(song);
             author.getSongs().add(song);
-            logger.trace("Created new sound: " + song);
+            logger.info("Created new sound: " + song);
         }
         return song;
     }

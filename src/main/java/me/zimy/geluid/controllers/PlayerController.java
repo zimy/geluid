@@ -2,7 +2,7 @@ package me.zimy.geluid.controllers;
 
 import me.zimy.geluid.domain.Song;
 import me.zimy.geluid.player.ServerPlayerInterface;
-import me.zimy.geluid.repositories.SongRepository;
+import me.zimy.geluid.services.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +19,12 @@ public class PlayerController {
     ServerPlayerInterface playerInterface;
 
     @Autowired
-    SongRepository songRepository;
+    SongService songService;
 
     @ResponseBody
     @RequestMapping(value = "/play/all", method = RequestMethod.GET)
     public String playAll() {
-        playerInterface.setPlayList(songRepository.findAll());
+        playerInterface.setPlayList(songService.getAll());
         playerInterface.play();
         return "{\"message\":\"Started\"}";
     }

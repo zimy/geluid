@@ -1,7 +1,7 @@
 package me.zimy.geluid.controllers;
 
 import me.zimy.geluid.domain.Song;
-import me.zimy.geluid.repositories.SongRepository;
+import me.zimy.geluid.services.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,11 +24,11 @@ import java.nio.file.attribute.BasicFileAttributes;
 @RequestMapping("/tracks")
 public class FileController {
     @Autowired
-    SongRepository repository;
+    SongService songService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public void download(HttpServletRequest request, HttpServletResponse response, @PathVariable Long id) throws IOException {
-        Song song = repository.getOne(id);
+        Song song = songService.findOne(id);
         Path path = Paths.get(song.getFilename());
         String mimeType = request.getServletContext().getMimeType(song.getFilename());
         response.setContentType(mimeType == null ? "application/octet-stream" : mimeType);

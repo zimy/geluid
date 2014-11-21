@@ -1,6 +1,6 @@
 package me.zimy.geluid.scanning;
 
-import me.zimy.geluid.MusicLocationList;
+import me.zimy.geluid.configuration.MusicLocationList;
 import me.zimy.geluid.informatories.ServerInformatory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

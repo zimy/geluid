@@ -1,4 +1,4 @@
-package me.zimy.geluid.repositories;
+package me.zimy.geluid.jpaservices;
 
 import me.zimy.geluid.domain.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
