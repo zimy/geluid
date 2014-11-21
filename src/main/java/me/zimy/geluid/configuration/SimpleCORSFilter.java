@@ -1,4 +1,4 @@
-package me.zimy.geluid.controllers;
+package me.zimy.geluid.configuration;
 
 import org.springframework.stereotype.Component;
 

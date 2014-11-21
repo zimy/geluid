@@ -51,13 +51,15 @@ public class GeluidScanner implements Runnable {
     public void run() {
         Map<String, ServerInformatory> available = getMapping(informatory);
         for (String s : locationList.getLocation()) {
-            logger.info("File scanning started " + s);
             try {
-                Files.walkFileTree(Paths.get(s).toAbsolutePath(), set, depth, new GeluidVisitor(available, saver));
+                logger.info("File scanning started " + s);
+                GeluidVisitor geluidVisitor = new GeluidVisitor(available, saver);
+                Files.walkFileTree(Paths.get(s).toAbsolutePath(), set, depth, geluidVisitor);
             } catch (IOException e) {
                 logger.info("File scanning failed:" + e.getMessage());
+            } finally {
+                logger.info("File scanning ended in " + s);
             }
-            logger.info("File scanning ended in " + s);
         }
     }
 }
