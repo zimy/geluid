@@ -1,6 +1,5 @@
 var req = new XMLHttpRequest();
 var typeOfTab = "";
-var hostprefix = "http://localhost:8080";
 
 window.onload = function(){
 	//document.getElementById('audioPlayer').src="sound.mp3";
@@ -23,7 +22,7 @@ function getGroupBySongId(child){
 	var id = child.parentNode.parentNode.id;
 	typeOfTab = "song";
  	$.ajax({
-		url: hostprefix + "/songs/author/" + id
+		url: "songs/author/" + id
 	}).then(function(data){
 		checkTab("songs");
 		fillLibrary(data,typeOfTab);
@@ -33,7 +32,7 @@ function getAlbumBySongId(child){
 	var id = child.parentNode.parentNode.id;
 	typeOfTab = "song";
  	$.ajax({
-		url: hostprefix + "/songs/album/" + id
+		url: "songs/album/" + id
 	}).then(function(data){
 		checkTab("songs");
 		fillLibrary(data,typeOfTab);
@@ -43,7 +42,7 @@ function getGenreBySongId(child){
 	var id = child.parentNode.parentNode.id;
 	typeOfTab = "song";
  	$.ajax({
-		url: hostprefix + "/songs/genre/" + id
+		url: "songs/genre/" + id
 	}).then(function(data){
 		checkTab("songs");
 		fillLibrary(data,typeOfTab);
@@ -53,7 +52,7 @@ function getSongsByAuthorId(child){
 	var id = child.parentNode.parentNode.id;
 	typeOfTab = "song";
  	$.ajax({
-		url: hostprefix + "/songs/author/all/" + id
+		url: "songs/author/all/" + id
 	}).then(function(data){
 		checkTab("songs");
 		fillLibrary(data,typeOfTab);
@@ -63,7 +62,7 @@ function getAlbumsByAuthorId(child){
 	var id = child.parentNode.parentNode.id;
 	typeOfTab = "album";
  	$.ajax({
-		url: hostprefix + "/albums/author/all" + id
+		url: "albums/author/all" + id
 	}).then(function(data){
 		checkTab("albums");
 		fillLibrary(data,typeOfTab);
@@ -73,7 +72,7 @@ function getSongsByAlbumId(child){
 	var id = child.parentNode.parentNode.id;
 	typeOfTab = "song";
  	$.ajax({
-		url: hostprefix + "/songs/album/all/" + id
+		url: "songs/album/all/" + id
 	}).then(function(data){
 		checkTab("songs");
 		fillLibrary(data,typeOfTab);
@@ -83,7 +82,7 @@ function getGroupByAlbumId(child){
 	var id = child.parentNode.parentNode.id;
 	typeOfTab = "group";
  	$.ajax({
-		url: hostprefix + "/authors/album/" + id
+		url: "authors/album/" + id
 	}).then(function(data){
 		checkTab("groups");
 		fillLibrary(data,typeOfTab);
@@ -93,7 +92,7 @@ function getSongsByGenreId(child){
 	var id = child.parentNode.parentNode.id;
 	typeOfTab = "song";
  	$.ajax({
-		url: hostprefix + "/songs/genre/all/" + id
+		url: "songs/genre/all/" + id
 	}).then(function(data){
 		checkTab("songs");
 		fillLibrary(data,typeOfTab);
@@ -103,7 +102,7 @@ function getSongsByGenreId(child){
 function getAllSongs(){
 	typeOfTab = "song";
 	$.ajax({
-		url: hostprefix + "/songs"
+		url: "songs"
 	}).then(function(data){
 		fillLibrary(data,typeOfTab);
 	});
@@ -111,7 +110,7 @@ function getAllSongs(){
 function getAllAuthors(){
 	typeOfTab = "author";
 	$.ajax({
-		url: hostprefix + "/authors"
+		url: "authors"
 	}).then(function(data){
 		fillLibrary(data,typeOfTab);
 	});
@@ -119,7 +118,7 @@ function getAllAuthors(){
 function getAllAlbums(){
 	typeOfTab = "album";
 	$.ajax({
-		url: hostprefix + "/albums"
+		url: "albums"
 	}).then(function(data){
 		fillLibrary(data,typeOfTab);
 	});
@@ -127,7 +126,7 @@ function getAllAlbums(){
 function getAllGenres(){
 	typeOfTab = "genre";
 	$.ajax({
-		url: hostprefix + "/genres"
+		url: "genres"
 	}).then(function(data){
 		fillLibrary(data,typeOfTab);
 	});
@@ -202,7 +201,7 @@ function fillLibrary(list, type){
 function playSong(child){
 	var id = child.parentNode.id;
 	var player = document.getElementById('audioPlayer');
-  	var url = hostprefix + "/tracks/" + id;
+  	var url = "tracks/" + id;
 	player.src = url;
 	player.play();
 }
@@ -217,14 +216,14 @@ function addToPlaylist(child, flag){
 
 	var myUrl;
 	switch (typeOfTab){
-		case "song": myUrl="/songs/"; break;
-		case "author": myUrl="/songs/author/all/"; break;
-		case "album": myUrl="/songs/album/all/"; break;
-		case "genre": myUrl="/songs/genre/all/"; break;
+		case "song": myUrl="songs/"; break;
+		case "author": myUrl="songs/author/all/"; break;
+		case "album": myUrl="songs/album/all/"; break;
+		case "genre": myUrl="songs/genre/all/"; break;
 	}
 	var id = child.parentNode.id;
 	$.ajax({
-		url: hostprefix + myUrl + id
+		url: myUrl + id
 	}).then(function (data){
 		fillPlaylist(data);
 	});
@@ -262,4 +261,13 @@ function checkTab(tabId){
 	tab.style.borderBottom="none";
 	tab.style.borderBottomRightRadius="0px";
 	tab.style.borderBottomLeftRadius="0px";
+}
+
+function playSongOnServer(){
+	$.ajax({
+		url: "player/play/2";
+	}).then(function (data){
+		alert(data);
+	});
+
 }
