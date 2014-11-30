@@ -3,9 +3,7 @@ jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
-
-after_success:
-  - pwd
-  - ls -la
-  - find * .
-
+cache:
+  directories:
+    - $HOME/.gradle
+---

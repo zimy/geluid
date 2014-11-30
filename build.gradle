@@ -19,7 +19,7 @@ repositories {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
-    distributionUrl = 'http://services.gradle.org/distributions/gradle-2.1-all.zip'
+    distributionUrl = 'http://services.gradle.org/distributions/gradle-2.2.1-all.zip'
 }
 
 apply plugin: 'com.sarhanm.versioner'
@@ -46,7 +46,7 @@ dependencies {
     compile 'com.googlecode.soundlibs:mp3spi:1.9.5-1'
     compile 'com.googlecode.soundlibs:vorbisspi:1.0.3-1'
     compile 'org:jaudiotagger:2.0.3'
-    compile 'org.webjars:jquery:2.1.1'
-    compile 'org.webjars:jquery-ui:1.11.1'
-    compile 'org.webjars:jquery-bem:d8aa79d'
+    runtime 'org.webjars:jquery:2.1.1'
+    runtime 'org.webjars:jquery-ui:1.11.1'
+    runtime 'org.webjars:jquery-bem:d8aa79d'
 }
