@@ -1,0 +1,43 @@
+.library_line{
+	border: 3px #FFE4B5 solid;
+	border-radius:10px;
+	height: 40px;
+	margin: 10px 20px 0px 20px;
+	padding: 0px 10px 0px 10px;
+	
+	overflow:auto;
+	text-overflow: ellipsis;
+}
+
+.library_line img{
+	width: 20px;
+	height: 20px;
+	margin-top: 10px;
+}
+
+.playButton{
+	margin-right: 10px;
+	float:left;
+}
+.addButton{
+	float:left;
+	margin-right: 20px;
+}
+
+.infoDiv{
+	float:right;
+	margin-left: 20px;
+}
+
+.line_name{
+	width:40%;
+	white-space: nowrap;
+	overflow: hidden;
+	float:left;	
+	margin-top:12px;
+	text-overflow: ellipsis;
+}
+.line_time{
+	margin:12px 15px 0px 10px;
+	float:left;
+}

@@ -1,12 +1,48 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-<h1>Hello</h1>
-
-<p>Waiting for web pages</p>
-</body>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Geluid</title>
+		<meta charset="utf-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript" src="geluidScripts.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/mainStyles.css">
+		<link rel="stylesheet" type="text/css" href="css/libraryStyles.css">
+		<link rel="stylesheet" type="text/css" href="css/playlistStyles.css">
+	</head>
+	<body>		
+		<div class="head">
+			<img src="images/geluid_logo.png" alt="logo" class="logoPic"/>
+			<img src="images/configurations.png" alt="config" class="configPic"/>
+		</div>
+		<hr/>
+		<div class="clearer"></div>
+		<div class="player">
+			<button class="prewTrack"><<</button>
+			<audio id="audioPlayer" controls></audio>
+			<button class="nextTrack">>></button>
+			<button id="playOnServer" onclick="playSongOnServer()">song2</button>
+		</div>
+		<div class="clearer"></div>
+		<div class="benches">
+			<div class="library">
+				<div class="tab" id="songs" onclick="onTabClick(this)">songs</div>
+				<div class="tab" id="authors" onclick="onTabClick(this)">authors</div>
+				<div class="tab" id="albums" onclick="onTabClick(this)">albums</div>
+				<div class="tab" id="genres" onclick="onTabClick(this)">genres</div>
+				<div class="clearer"></div>
+				<div class="library_content">								
+				</div>
+			</div>
+			<div class="playlist">
+				<h2>Playlist</h2>
+				<button class="importButton">import</button>
+				<button class="exportButton">export</button>
+				<div class="clearer"></div>
+				<div class="playlist_content"></div>
+			</div>
+			<div class="clearer"></div>
+			<hr/>
+			<div class="footer"></div>
+		</div>
+	</body>
 </html>
