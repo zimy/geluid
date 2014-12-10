@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/zimy/geluid.png?label=ready&title=Ready)](https://waffle.io/zimy/geluid)
 #Geluid [![Build Status](https://travis-ci.org/zimy/geluid.svg?branch=master)](https://travis-ci.org/zimy/geluid)
 Geluid - music player server with a web-based user interface
 
