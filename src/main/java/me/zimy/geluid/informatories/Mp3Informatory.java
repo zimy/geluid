@@ -1,6 +1,6 @@
 package me.zimy.geluid.informatories;
 
-import me.zimy.geluid.scanning.ExtensionFinder;
+import org.apache.commons.io.FilenameUtils;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
@@ -28,7 +28,7 @@ public class Mp3Informatory implements ServerInformatory {
     @Override
     public AudioFileMetadata getMetadata(String fileName) {
         AudioFileMetadata result = null;
-        if (!ext.contains(ExtensionFinder.getExtension(fileName))) {
+        if (!ext.contains(FilenameUtils.getExtension(fileName))) {
             result = null;
         } else {
             try {

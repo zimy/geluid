@@ -1,6 +1,7 @@
 package me.zimy.geluid.scanning;
 
 import me.zimy.geluid.informatories.ServerInformatory;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class GeluidVisitor extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
-        ServerInformatory informer = available.get(ExtensionFinder.getExtension(file.toString()));
+        ServerInformatory informer = available.get(FilenameUtils.getExtension(file.toString()));
         if (attributes.isRegularFile() && informer != null) {
             saver.persistAudio(file, informer);
         }
